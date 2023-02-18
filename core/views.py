@@ -1,26 +1,36 @@
+# import requests
 from django.shortcuts import render
 from django.contrib.auth import authenticate
+# from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
 from core.models import User
+from . import gera_graficos
 
 
 def home(request):
     return render(request, 'core/home.html')
 
 
-def login(request):
+# @login_required
+def principal(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']        
         usuario = authenticate(request, username=username, password=password)
         if usuario is not None:
             request.session['access_level'] = usuario.access_level
-            request.session['username'] = usuario.email
-            return render(request, 'core/principal.html')
-        return render(request, 'core/home.html')
+
+            data_cpu = gera_graficos._consumo_cpu()
+            # data_memoria = gera_graficos._consumo_memoria()
+
+            return render(request, 'core/principal.html', {'data': data_cpu})
+            
+        return HttpResponse(request, 'core/home.html')
 
 
 def gerenciamento_usuarios(request):
-    return render(request, 'core/tela_gerenciamento_usuarios.html')
+    return render(request, 'core/gerenciamento_usuarios.html')
 
 
 def cadastro_usuario(request):
@@ -30,3 +40,5 @@ def cadastro_usuario(request):
     user = User.objects.create_user(email, password, access_level)
     user.save()
     return render(request, 'core/teste.html')
+
+
