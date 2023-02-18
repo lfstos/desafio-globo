@@ -48,16 +48,18 @@
                   <div class="col-sm">
                     
                     <canvas id="cpu"></canvas>
+                    <canvas id="memoria"></canvas>
+                    <canvas id="info_cluster"></canvas>
                     
                     <script>
-                        var ctx = document.getElementById('cpu').getContext('2d');
-                        var chart = new Chart(ctx, {
+                        var ctx1 = document.getElementById('cpu').getContext('2d');
+                        var chart1 = new Chart(ctx1, {
                             type: 'bar',
                             data: {
-                                labels: {{ data.labels|safe }},
+                                labels: {{ data_cpu.labels|safe }},
                                 datasets: [{
-                                    label: 'Consumo do uso de CPU',
-                                    data: {{ data.values|safe }},
+                                    label: 'Consumo do uso de CPU...',
+                                    data: {{ data_cpu.values|safe }},
                                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                     borderColor: 'rgba(54, 162, 235, 1)',
                                     borderWidth: 1
@@ -73,59 +75,38 @@
                                 }
                             }
                         });
-                    </script>
-                    
-                  </div>
-                  <div class="col-sm">
 
-                    Consumo de memória
-                    <canvas id="memoria"></canvas>
-                    
-    
-                    <script>
-
-
-
-                        const newData = {
-                            labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho'],
-                            datasets: [
-                              {
-                                label: 'Vendas',
-                                data: [12, 19, 3, 5, 2, 3, 7],
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                              },
-                              {
-                                label: 'Lucro',
-                                data: [8, 14, 10, 7, 6, 8, 12],
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                              }
-                            ]
-                          };
-                          
-                          // obtenha o gráfico existente
-                          const chart = new Chart(document.getElementById('memoria'), {
-                            type: 'bar',
-                            data: newData,
-                            options: {
-                              scales: {
-                                yAxes: [{
-                                  ticks: {
-                                    beginAtZero: true
-                                  }
+                        var ctx2 = document.getElementById('memoria').getContext('2d');
+                        var chart2 = new Chart(ctx2, {
+                            type: 'line',
+                            data: {
+                                labels: {{ data_memoria.labels|safe }},
+                                datasets: [{
+                                    label: 'Consumo do uso de memória...',
+                                    data: {{ data_memoria.values|safe }},
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
                                 }]
-                              }
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
                             }
-                          });
+                        });
 
+                        
 
-                    
+                        
                     </script>
-
+                    
                   </div>
+                  
                   <div class="col-sm">
                     Infomação do Cluster
                   </div>
@@ -135,15 +116,9 @@
                 <h1>Sem acesso a essa página
            {% endif %} 
 
-
-
        </div>
 
         </div>
     </div>
-
-
-
-
 </body>
 </html>

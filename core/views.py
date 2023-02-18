@@ -22,9 +22,17 @@ def principal(request):
             request.session['access_level'] = usuario.access_level
 
             data_cpu = gera_graficos._consumo_cpu()
-            # data_memoria = gera_graficos._consumo_memoria()
+            data_memoria = gera_graficos._consumo_memoria()
+            info_cluster = gera_graficos._info_cluster
 
-            return render(request, 'core/principal.html', {'data': data_cpu})
+            # context = {
+            #     'data_cpu': data_cpu,
+            #     'data_memoria': data_memoria
+            # }
+
+            print(info_cluster)
+
+            return render(request, 'core/principal.html', {'data_cpu': data_cpu, 'data_memoria': data_memoria, 'data_cluster': info_cluster})
             
         return HttpResponse(request, 'core/home.html')
 
