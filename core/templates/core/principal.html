@@ -49,9 +49,10 @@
                     
                     <canvas id="cpu"></canvas>
                     <canvas id="memoria"></canvas>
-                    <canvas id="info_cluster"></canvas>
+                    <canvas id="cluster">info_cluster</canvas>
                     
                     <script>
+
                         var ctx1 = document.getElementById('cpu').getContext('2d');
                         var chart1 = new Chart(ctx1, {
                             type: 'bar',
@@ -100,16 +101,37 @@
                             }
                         });
 
-                        
+
+
+                        var ctx3 = document.getElementById('cluster').getContext('2d');
+                        var chart3 = new Chart(ctx3, {
+                            type: 'line',
+                            data: {
+                                labels: {{ info_cluster.labels|safe }},
+                                datasets: [{
+                                    label: 'Informação sobre o cluster...',
+                                    data: {{ info_cluster.values|safe }},
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                                }] 
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
 
                         
                     </script>
                     
                   </div>
-                  
-                  <div class="col-sm">
-                    Infomação do Cluster
-                  </div>
+                                    
                 </div>
               </div>
            {% else %}
