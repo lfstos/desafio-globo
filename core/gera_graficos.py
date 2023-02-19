@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 def _consumo_cpu():
@@ -25,13 +26,9 @@ def _consumo_memoria():
     return data
 
 
-def _info_cluster(request):
+def _info_cluster():
     response = requests.get('https://run.mocky.io/v3/cab2791c-7c85-4461-b95c-86bc1a12dc72')
-    resp = response.json()
+    data = response.json()
+    data_json = json.dumps(data)
 
-    data = {
-        'labels': resp['status'],
-        'values': resp['status']
-    }
-
-    return data
+    return data_json
