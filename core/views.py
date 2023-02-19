@@ -23,16 +23,11 @@ def principal(request):
 
             data_cpu = gera_graficos._consumo_cpu()
             data_memoria = gera_graficos._consumo_memoria()
-            info_cluster = gera_graficos._info_cluster
-
-            # context = {
-            #     'data_cpu': data_cpu,
-            #     'data_memoria': data_memoria
-            # }
+            info_cluster = gera_graficos._info_cluster()
 
             print(info_cluster)
 
-            return render(request, 'core/principal.html', {'data_cpu': data_cpu, 'data_memoria': data_memoria, 'data_cluster': info_cluster})
+            return render(request, 'core/principal.html', {'data_cpu': data_cpu, 'data_memoria': data_memoria, 'info_cluster': info_cluster})
             
         return HttpResponse(request, 'core/home.html')
 
