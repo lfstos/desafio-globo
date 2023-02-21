@@ -1,146 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+{% extends 'core/base.html' %}
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% block title %}Desafio globo{% endblock title %}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Principal</title>
-</head>
-<body>
+{% block content %}
     
-
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <span class="fs-5 d-none d-sm-inline">Menu</span>
-                    </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="home" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Tela de Login</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'core:principal' %}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Tela Principal</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Tela de gerenciamento de usuários</span> </a>
-                        </li>
-                    </ul>
-                    <hr>
-                </div>
-            </div>
-                       
+{% comment %} {% if request.session.access_level == "administrador" %} {% endcomment %}
+    <div class="container">
+        <div class="row">
+        <div class="col-sm">
             
-            {% if request.session.access_level == "administrador" %}
-            <div class="container">
-                <div class="row">
-                  <div class="col-sm">
-                    
-                    <canvas id="cpu"></canvas>
-                    <canvas id="memoria"></canvas>
-                    <canvas id="cluster">info_cluster</canvas>
-                    
-                    <script>
+            <canvas id="cpu"></canvas>
+            <canvas id="memoria"></canvas>
+            <canvas id="cluster">info_cluster</canvas>
+            
+            <script>
 
-                        var ctx1 = document.getElementById('cpu').getContext('2d');
-                        var chart1 = new Chart(ctx1, {
-                            type: 'bar',
-                            data: {
-                                labels: {{ data_cpu.labels|safe }},
-                                datasets: [{
-                                    label: 'Consumo do uso de CPU...',
-                                    data: {{ data_cpu.values|safe }},
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true
-                                        }
-                                    }]
+                var ctx1 = document.getElementById('cpu').getContext('2d');
+                var chart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ data_cpu.labels|safe }},
+                        datasets: [{
+                            label: 'Consumo do uso de CPU...',
+                            data: {{ data_cpu.values|safe }},
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
                                 }
-                            }
-                        });
+                            }]
+                        }
+                    }
+                });
 
-                        var ctx2 = document.getElementById('memoria').getContext('2d');
-                        var chart2 = new Chart(ctx2, {
-                            type: 'line',
-                            data: {
-                                labels: {{ data_memoria.labels|safe }},
-                                datasets: [{
-                                    label: 'Consumo do uso de memória...',
-                                    data: {{ data_memoria.values|safe }},
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true
-                                        }
-                                    }]
+                var ctx2 = document.getElementById('memoria').getContext('2d');
+                var chart2 = new Chart(ctx2, {
+                    type: 'line',
+                    data: {
+                        labels: {{ data_memoria.labels|safe }},
+                        datasets: [{
+                            label: 'Consumo do uso de memória...',
+                            data: {{ data_memoria.values|safe }},
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
                                 }
-                            }
-                        });
+                            }]
+                        }
+                    }
+                });
 
 
 
-                        var ctx3 = document.getElementById('cluster').getContext('2d');
-                        var chart3 = new Chart(ctx3, {
-                            type: 'line',
-                            data: {
-                                labels: {{ info_cluster.labels|safe }},
-                                datasets: [{
-                                    label: 'Informação sobre o cluster...',
-                                    data: {{ info_cluster.values|safe }},
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 1
-                                }] 
-                            },
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true
-                                        }
-                                    }]
+                {% comment %} var ctx3 = document.getElementById('cluster').getContext('2d');
+                var chart3 = new Chart(ctx3, {
+                    type: 'line',
+                    data: {
+                        labels: {{ info_cluster.labels|safe }},
+                        datasets: [{
+                            label: 'Informação sobre o cluster...',
+                            data: {{ info_cluster.values|safe }},
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }] 
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
                                 }
-                            }
-                        });
+                            }]
+                        }
+                    }
+                }); {% endcomment %}
 
-                        
-                    </script>
-                    
-                  </div>
-                                    
-                </div>
-              </div>
-           {% else %}
-                <h1>Sem acesso a essa página
-           {% endif %} 
-
-       </div>
-
+                
+            </script>
+            
+        </div>
+                            
         </div>
     </div>
-</body>
-</html>
+    {% comment %} {% else %}
+        <h1>Sem acesso a essa página
+    {% endif %}  {% endcomment %}
+
+
+{% endblock content %}
