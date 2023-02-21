@@ -40,13 +40,13 @@ def gerenciamento_usuarios(request):
     return render(request, 'core/gerenciamento_usuarios.html')
 
 
-def cadastro_usuario(request):
-    email = request.POST['email']
-    password = request.POST['password']
-    access_level = request.POST['access_level']
-    user = User.objects.create_user(email, password, access_level)
-    user.save()
-    return render(request, 'core/lista_usuarios.html')
+# def cadastro_usuario(request):
+#     email = request.POST['email']
+#     password = request.POST['password']
+#     access_level = request.POST['access_level']
+#     user = User.objects.create_user(email, password, access_level)
+#     user.save()
+#     return render(request, 'core/lista_usuarios.html')
 
 
 def lista_usuarios(request):
@@ -70,13 +70,13 @@ def edita_usuario(request, pk):
     form = UserForm(request.POST or None, instance=user)
     if form.is_valid():
         form.save()
-        return redirect('lista_usuario')
-    return render(request, 'user_form.html', {'form': form})
+        return redirect('core:lista-usuarios')
+    else:
+        form = UserForm(instance=user)
+        return render(request, 'core/editar_usuario.html', {'form': form})
 
 
 def exclui_usuario(request, pk):
     user = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        user.delete()
-        return redirect('lista_usuario')
-    return render(request, 'usuario_confirm_delete.html', {user: user})
+    user.delete()
+    return redirect('core:lista-usuarios')
