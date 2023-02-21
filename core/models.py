@@ -44,6 +44,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     App base User class
     Email and password are required. Other fields are optional.
     """
+
+    ACCESS_LEVEL_CHOICES = (
+        ('ADM', 'Administrador'),
+        ('FUNC', 'Funcionário')
+    )
     
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     email = models.EmailField(_("email address"), unique=True)
@@ -61,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    access_level = models.CharField(_("access_level"), max_length=15, null=True)
+    access_level = models.CharField(_("access_level"), choices=ACCESS_LEVEL_CHOICES, max_length=15, null=True)
 
     objects = UserManager()
 
