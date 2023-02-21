@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1></h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="{% url 'core:cadastra-usuarios' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                
+                {% comment %} <div class="mb-3">
+                    <label for="access_level" class="form-label">Nível de  Acesso</label>
+                    <textarea class="form-control" id="access_level" name="access_level"></textarea>
+                </div> {% endcomment %}
+
+                <div class="mb-3">
+                    <label for="access_level" class="form-label">Nível de  Acesso</label>
+                    <select class="form-control" id="access_level" name="access_level">
+                        <option value="ADM">Administrador</option>
+                        <option value="FUNC">Funcionário</option>
+                    </select>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+        
+
+{% endblock content %}
