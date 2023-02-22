@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate
-# from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from core.models import User
+
 from .forms import UserForm
 from . import gera_graficos
 
@@ -12,30 +12,29 @@ def home(request):
     return render(request, 'core/home.html')
 
 
-# @login_required
+@login_required
 def principal(request):
     if request.method == 'POST':
         username = request.POST['username']
-        password = request.POST['password']        
+        password = request.POST['password']
         usuario = authenticate(request, username=username, password=password)
         if usuario is not None:
             request.session['access_level'] = usuario.access_level
-
             data_cpu = gera_graficos.consumo_cpu()
             data_memoria = gera_graficos.consumo_memoria()
             info_cluster = gera_graficos.info_cluster()
-
             # context = {
             #     "data_cpu": data_cpu, 
             #     "data_memoria": data_memoria, 
             #     "info_cluster": info_cluster
             # }
+        
+            return render(request, 'core/principal.html', 
+                {'data_cpu': data_cpu, 'data_memoria': data_memoria, 'info_cluster': info_cluster})
+        return render(request, 'core/home.html')
 
-            return render(request, 'core/principal.html', {'data_cpu': data_cpu, 'data_memoria': data_memoria, 'info_cluster': info_cluster})
-            
-        return HttpResponse(request, 'core/home.html')
 
-
+@login_required
 def gerenciamento_usuarios(request):
     return render(request, 'core/gerenciamento_usuarios.html')
 
@@ -49,11 +48,13 @@ def gerenciamento_usuarios(request):
 #     return render(request, 'core/lista_usuarios.html')
 
 
+@login_required
 def lista_usuarios(request):
     usuarios = User.objects.all()
     return render(request, 'core/lista_usuarios.html', {'usuarios': usuarios})
 
 
+@login_required
 def cadastro_usuario_teste(request):
     print('aqui grava usuário')
     form = UserForm(request.POST or None)
@@ -65,18 +66,20 @@ def cadastro_usuario_teste(request):
     return redirect('core:lista-usuarios')
   
 
+@login_required
 def edita_usuario(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    form = UserForm(request.POST or None, instance=user)
+    usuario = get_object_or_404(User, pk=pk)
+    form = UserForm(request.POST or None, instance=usuario)
     if form.is_valid():
         form.save()
         return redirect('core:lista-usuarios')
     else:
-        form = UserForm(instance=user)
+        form = UserForm(instance=usuario)
         return render(request, 'core/editar_usuario.html', {'form': form})
 
 
+@login_required
 def exclui_usuario(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    user.delete()
+    usuario = get_object_or_404(User, pk=pk)
+    usuario.delete()
     return redirect('core:lista-usuarios')
