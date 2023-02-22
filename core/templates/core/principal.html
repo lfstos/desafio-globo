@@ -1,14 +1,33 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Desafio globo{% endblock title %}
+{% block title %}Tela Principal{% endblock title %}
 
 {% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     
-{% comment %} {% if request.session.access_level == "administrador" %} {% endcomment %}
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Tela de Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Tela Principal</a>
+        </li>
+
+        {% if request.session.access_level == 'ADM' %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:lista-usuarios' %}">Tela de gerenciamento de usuários</a>
+            </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
     <div class="container">
         <div class="row">
-        <div class="col-sm">
-            
+        <div class="col-sm-5">
+
             <canvas id="cpu"></canvas>
             <canvas id="memoria"></canvas>
             <canvas id="cluster">info_cluster</canvas>
@@ -63,42 +82,23 @@
                     }
                 });
 
-
-
                 {% comment %} var ctx3 = document.getElementById('cluster').getContext('2d');
                 var chart3 = new Chart(ctx3, {
-                    type: 'line',
+                    type: 'doughnut',
                     data: {
-                        labels: {{ info_cluster.labels|safe }},
                         datasets: [{
-                            label: 'Informação sobre o cluster...',
-                            data: {{ info_cluster.values|safe }},
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }] 
+                            data: [1],
+                            backgroundColor: ['#00ff00'],
+                            borderWidth: 0,
+                        }],
                     },
                     options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
+                        cutoutPercentage: 1,
+                        responsive: true,
+                        maintainAspectRatio: false,
                     }
                 }); {% endcomment %}
-
-                
             </script>
-            
-        </div>
-                            
-        </div>
+        </div>       
     </div>
-    {% comment %} {% else %}
-        <h1>Sem acesso a essa página
-    {% endif %}  {% endcomment %}
-
-
 {% endblock content %}
