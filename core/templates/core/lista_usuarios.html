@@ -6,9 +6,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
+
+
+
             <form action="{% url 'core:cadastra-usuarios' %}">
                 <button type="submit" class="btn btn-primary">Cadastrar</button>
-                <a href="{% url 'core:principal' %}" class="btn btn-danger">Home</a>
             </form>
         </div>
         <div class="col-md-6">
@@ -32,6 +34,8 @@
                         </tr>
                     {% endfor %}    
 
+
+                    
                 </tbody>
             </table>
         </div>
