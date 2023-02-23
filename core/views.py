@@ -12,7 +12,8 @@ def home(request):
     return render(request, 'core/home.html')
 
 
-@login_required
+# @login_required
+@login_required(login_url='login')
 def principal(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -34,7 +35,7 @@ def principal(request):
         return render(request, 'core/home.html')
 
 
-@login_required
+@login_required(login_url='login')
 def gerenciamento_usuarios(request):
     return render(request, 'core/gerenciamento_usuarios.html')
 
@@ -48,13 +49,13 @@ def gerenciamento_usuarios(request):
 #     return render(request, 'core/lista_usuarios.html')
 
 
-@login_required
+@login_required(login_url='login')
 def lista_usuarios(request):
     usuarios = User.objects.all()
     return render(request, 'core/lista_usuarios.html', {'usuarios': usuarios})
 
 
-@login_required
+@login_required(login_url='login')
 def cadastro_usuario_teste(request):
     print('aqui grava usuário')
     form = UserForm(request.POST or None)
@@ -66,7 +67,7 @@ def cadastro_usuario_teste(request):
     return redirect('core:lista-usuarios')
   
 
-@login_required
+@login_required(login_url='login')
 def edita_usuario(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     form = UserForm(request.POST or None, instance=usuario)
@@ -78,7 +79,7 @@ def edita_usuario(request, pk):
         return render(request, 'core/editar_usuario.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='login')
 def exclui_usuario(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     usuario.delete()
